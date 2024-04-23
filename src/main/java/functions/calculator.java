@@ -1,68 +1,68 @@
 package functions;
-import java.util.ArrayList;
-
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Application;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
-import ejb.calcculationFunction;
+@Entity
 
-@Stateless
-@Path("/func")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
 public class calculator {
-    @EJB
-    calcculationFunction x;
-    ArrayList<calcculationFunction> nums = new ArrayList<calcculationFunction>();
-     @POST
-     @Path("/calc")
-        
-        public float calculateOperation(calcculationFunction request) {
-            
-    	 int num1 = request.number1;
-         int num2 = request.number2;
-         String operation = request.operation;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private int number1;
+    private int number2;
+    private String operation;
 
-         float result = 0;
-
-         switch (operation) {
-             case "+":
-                 result = num1 + num2;
-                 break;
-             case "-":
-                 result = num1 - num2;
-                 break;
-             case "*":
-                 result = num1 * num2;
-                 break;
-             case "/":
-                 result = (float) num1 / num2;
-                 break;
-             
-         }
-         nums.add(request);
-         return result;
-         }
-     
-            
-
-            
-        
-     @GET
-        @Path("/calculations")
-        public Response getAllCalculations() {
-            return Response.ok().entity(nums).build();
+    public int performCalculation(int number1, int number2, String operation) {
+        int result;
+        switch (operation) {
+            case "+":
+                result = number1 + number2;
+                break;
+            case "-":
+                result = number1 - number2;
+                break;
+            case "*":
+                result = number1 * number2;
+                break;
+            case "/":
+                result = number1 / number2;
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid operation");
         }
     
+      
+       
+        
+        return result ;
+    }
 
+	
+
+    public int getNumber1() {
+        return number1;
+    }
+
+    public void setNumber1(int number1) {
+        this.number1 = number1;
+    }
+
+    public int getNumber2() {
+        return number2;
+    }
+
+    public void setNumber2(int number2) {
+        this.number2 = number2;
+    }
+
+    public String getOperation() {
+        return operation;
+    }
+
+    public void setOperation(String operation) {
+        this.operation = operation;
+    }
 }
